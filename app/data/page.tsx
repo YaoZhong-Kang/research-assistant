@@ -81,8 +81,8 @@ export default function DataPage() {
       trimWhitespace: false,
       removeMissingRows: false,
       removeInvalidRows: false,
+      removeOutlierRows: false,
     });
-
 
   function loadWorksheet(
     workbookToLoad:
@@ -614,6 +614,7 @@ export default function DataPage() {
       trimWhitespace: false,
       removeMissingRows: false,
       removeInvalidRows: false,
+      removeOutlierRows: false,
     });
   }
 
