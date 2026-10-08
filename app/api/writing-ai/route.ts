@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import {
+  checkAiRateLimit,
+  getClientIp,
+} from "@/lib/rate-limit";
 
 const client = new OpenAI({
   baseURL: "https://api.deepseek.com",
@@ -49,6 +53,42 @@ export async function POST(request: NextRequest) {
         }
       );
     }
+
+    const ip =
+        getClientIp(
+            request
+        );
+
+        const rateLimit =
+        checkAiRateLimit(
+            ip
+        );
+
+
+        if (
+        !rateLimit.allowed
+        ) {
+
+        const response =
+            NextResponse.json(
+            {
+                error:
+                `AI 请求过于频繁，请约 ${rateLimit.retryAfterSeconds} 秒后再试。`,
+            },
+            {
+                status: 429,
+            }
+            );
+
+        response.headers.set(
+            "Retry-After",
+            String(
+            rateLimit.retryAfterSeconds
+            )
+        );
+
+        return response;
+        }
 
     const completion =
       await client.chat.completions.create({

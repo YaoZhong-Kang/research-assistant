@@ -90,16 +90,26 @@ export default function LiteraturePage() {
   >({});
 
 
-  async function searchLiterature() {
+  async function searchLiterature(
+    searchQuery?: string
+  ) {
 
-    if (!query.trim()) {
+    const targetQuery =
+      (
+        searchQuery ??
+        query
+      ).trim();
+
+
+    if (!targetQuery) {
 
       setError(
-        "请输入论文标题或关键词"
+        "请输入论文标题、关键词或 DOI"
       );
 
       return;
     }
+
 
     setLoading(true);
 
@@ -107,25 +117,32 @@ export default function LiteraturePage() {
 
     setExpandedId(null);
 
+
     try {
 
       const response =
         await fetch(
           `/api/literature?q=${encodeURIComponent(
-            query
+            targetQuery
           )}`
         );
 
+
       if (!response.ok) {
-        const errorData = await response.json();
+
+        const errorData =
+          await response.json();
 
         throw new Error(
-          errorData.error || `搜索失败 (${response.status})`
+          errorData.error ||
+            `搜索失败 (${response.status})`
         );
       }
 
+
       const data =
         await response.json();
+
 
       setResults(
         data.results || []
@@ -133,7 +150,9 @@ export default function LiteraturePage() {
 
     } catch (error) {
 
-      console.error(error);
+      console.error(
+        error
+      );
 
       setError(
         "搜索文献时出现错误，请稍后重试。"
@@ -145,6 +164,23 @@ export default function LiteraturePage() {
     }
   }
 
+  function loadLiteratureExample() {
+
+    const exampleDoi =
+      "10.1109/CVPR.2016.90";
+
+    setQuery(
+      exampleDoi
+    );
+
+    setError("");
+
+    setResults([]);
+
+    void searchLiterature(
+      exampleDoi
+    );
+  }
 
   function generateBibTeX(
     work: Work
@@ -765,8 +801,8 @@ export default function LiteraturePage() {
 
 
         <button
-          onClick={
-            searchLiterature
+          onClick={() =>
+            searchLiterature()
           }
 
           disabled={loading}
@@ -779,7 +815,25 @@ export default function LiteraturePage() {
         </button>
 
       </div>
+      
+      <div className="mt-3 flex flex-wrap items-center gap-3">
 
+        <button
+          type="button"
+          onClick={
+            loadLiteratureExample
+          }
+          disabled={loading}
+          className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-600 transition hover:bg-gray-50 disabled:opacity-40"
+        >
+          ✨ 一键体验示例论文
+        </button>
+
+        <p className="text-xs text-gray-400">
+          示例：Deep Residual Learning for Image Recognition
+        </p>
+
+      </div>
 
       {error && (
         <p className="mt-4 text-sm text-red-600">

@@ -12,6 +12,8 @@ import {
   analyzeWriting,
 } from "@/lib/writing-utils";
 
+const writingExample = `实验在20C条件下进行，气体流速为3m/s。实验结果显示,SEM具有非常明显的优势。我们的方法效果非常好，并且显然优于所有现有方法。图1展示了实验结果，图3给出了进一步分析。已有研究[1][2][4]支持该观点，因此我们认为该方法能够解决这一领域的大部分问题。`;
+
 export default function WritingPage() {
   const [text, setText] =
     useState("");
@@ -112,6 +114,21 @@ export default function WritingPage() {
     setAiLoading(false);
   }
 
+  function loadWritingExample() {
+
+    setText(
+      writingExample
+    );
+
+    setChecked(
+      true
+    );
+
+    setAiResult("");
+
+    setAiError("");
+  }
+
   return (
     <main className="mx-auto max-w-5xl px-6 py-16">
 
@@ -191,7 +208,14 @@ export default function WritingPage() {
               : "✨ AI 学术表达分析"}
           </button>
 
-          
+          <button
+            onClick={
+              loadWritingExample
+            }
+            className="rounded-xl border border-gray-300 px-5 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+          >
+            ✨ 载入示例文本
+          </button>
           
           <button
             onClick={clearText}

@@ -377,6 +377,98 @@ export default function DataPage() {
   }
 
 
+
+  function loadExampleData() {
+
+    const exampleHeaders =
+      [
+        "sample",
+        "temperature",
+        "date",
+        "note",
+      ];
+
+
+    const exampleRows: Row[] =
+      [
+        {
+          sample: "A",
+          temperature: "20.1",
+          date: "2026-10-01",
+          note: "normal",
+        },
+
+        {
+          sample: "B",
+          temperature: "21.3",
+          date: "2026-10-02",
+          note: " test",
+        },
+
+        {
+          sample: "C",
+          temperature: "",
+          date: "2026-10-03",
+          note: "normal",
+        },
+
+        {
+          sample: "C",
+          temperature: "",
+          date: "2026-10-03",
+          note: "normal",
+        },
+
+        {
+          sample: "D",
+          temperature: "abc",
+          date: "2026/10/04",
+          note: " abnormal",
+        },
+
+        {
+          sample: "E",
+          temperature: "22.5",
+          date: "2026-10-05",
+          note: "normal",
+        },
+      ];
+
+
+    setError("");
+
+    setWorkbook(null);
+
+    setSheetNames([]);
+
+    setSelectedSheet("");
+
+    setPreviewRows(null);
+
+
+    setCleaningOptions({
+      removeDuplicates: false,
+      trimWhitespace: false,
+      removeMissingRows: false,
+      removeInvalidRows: false,
+      removeOutlierRows: false,
+    });
+
+
+    setFileName(
+      "示例科研数据.csv"
+    );
+
+    setHeaders(
+      exampleHeaders
+    );
+
+    setRows(
+      exampleRows
+    );
+  }
+
+
   const originalColumnIssues =
     useMemo(
       () =>
@@ -741,6 +833,24 @@ export default function DataPage() {
 
         </label>
 
+        <div className="mt-5">
+
+          <button
+            type="button"
+            onClick={
+              loadExampleData
+            }
+            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+          >
+            ✨ 使用示例数据
+          </button>
+
+          <p className="mt-2 text-xs text-gray-400">
+            没有准备数据文件？可以直接载入示例体验完整检测流程。
+          </p>
+
+        </div>
+      
 
         {fileName && (
 
